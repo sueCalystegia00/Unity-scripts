@@ -3,34 +3,27 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System;
 using UnityEngine;
-using System.IO;
 
 namespace ViveSR.anipal.Eye
 {
-    ///<summary>
-    /// This source code is based on SRanipal_Unity_SDK version 1.1.0.1.
-    /// This class collects eye movement data measured by VIVE-PRO-EYE.
-    ///</summary>
-
     public class GetEyeDataModule : MonoBehaviour
     {
-        private static EyeData_v2 eyeData = new EyeData_v2(); // The Moudle of getting eyedata measured by VIVE PRO EYE 
-        private bool eye_callback_registered = false;         // To use the callback function called by 120Hz
+        private static EyeData_v2 eyeData = new EyeData_v2(); // VIVE PRO EYE から眼球データを受け取るモジュール
+        private bool eye_callback_registered = false;         // 120Hzで計測するためのコールバック関数が利用可能か
+        readonly static object DebugWriter = new object();      // Lockステートメント用オブジェクト
+        public static int timeStamp;    // VIVE内部の時間(ミリ秒)
+        public static float pupilDiameterLeft, pupilDiameterRight;  // 瞳孔径
+        public static Vector3 gazeOriginLeft, gazeOriginRight;      // 空間における眼球位置
+        public static Vector3 gazeDirectionLeft, gazeDirectionRight;    // 視線ベクトル
 
-        private static int initTime = 0;
-        public static int timeStamp;
-        public static float pupilDiameterLeft, pupilDiameterRight;
-        public static Vector3 gazeOriginLeft, gazeOriginRight;
-        public static Vector3 gazeDirectionLeft, gazeDirectionRight;
-
-        readonly static object DebugWriter = new object();
+        
 
         /// <summary>
         /// Use this for initialization
         /// </summary>
         void Start()
         {
-            // Whether to enable anipal's Eye module
+            // 視線計測プログラムの状態確認
             if (!SRanipal_Eye_Framework.Instance.EnableEye) return;
         }
 
@@ -39,11 +32,11 @@ namespace ViveSR.anipal.Eye
         /// </summary>
         void Update()
         {
-            // check the status of the anipal engine before getting eye data
+            // 視線計測の前にモジュールの状態を確認
             if (SRanipal_Eye_Framework.Status != SRanipal_Eye_Framework.FrameworkStatus.WORKING &&
                 SRanipal_Eye_Framework.Status != SRanipal_Eye_Framework.FrameworkStatus.NOT_SUPPORT) return;
 
-            // the spells to use a callback function to get the measurement data at 120fps
+            // コールバックを呼び出すためのおまじない
             if (SRanipal_Eye_Framework.Instance.EnableEyeDataCallback == true && eye_callback_registered == false)
             {
                 SRanipal_Eye_v2.WrapperRegisterEyeDataCallback(Marshal.GetFunctionPointerForDelegate((SRanipal_Eye_v2.CallbackBasic)EyeCallback));
@@ -61,16 +54,17 @@ namespace ViveSR.anipal.Eye
         /// </summary>
         private static void EyeCallback(ref EyeData_v2 eye_data)
         {
-            // Gets data from anipal's Eye module
+            // anipalモジュールから眼球データを取得
             eyeData = eye_data;
 
-            // The time when the frame was capturing. in millisecond.
+            // 時間を取得(ミリ秒)
             timeStamp = eyeData.timestamp;
 
-            // The diameter of the pupil in milli meter
+            // 瞳孔径の値を取得(ミリメートル)
             pupilDiameterLeft = eyeData.verbose_data.left.pupil_diameter_mm;
             pupilDiameterRight = eyeData.verbose_data.right.pupil_diameter_mm;
 
+            // 視線の原点とベクトルを取得(3次元座標，正規化ベクトル)
             SRanipal_Eye_v2.GetGazeRay(GazeIndex.LEFT, out gazeOriginLeft, out gazeDirectionLeft, eyeData);
             SRanipal_Eye_v2.GetGazeRay(GazeIndex.RIGHT, out gazeOriginRight, out gazeDirectionRight, eyeData);
 
@@ -84,6 +78,7 @@ namespace ViveSR.anipal.Eye
             gazeDirectionRight = eyeData.verbose_data.right.gaze_direction_normalized;
             */
 
+            // CSV書き出し用モジュールの呼び出し
             lock (DebugWriter)
             {
                 CSVWriter.Write();

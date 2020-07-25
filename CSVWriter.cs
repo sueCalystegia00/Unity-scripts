@@ -7,22 +7,18 @@ using System.IO;
 
 namespace ViveSR.anipal.Eye
 {
-
-    ///<summary>
-    /// This source code is based on SRanipal_Unity_SDK version 1.1.0.1.
-    /// This class collects eye movement data measured by VIVE-PRO-EYE.
-    ///</summary>
-
     public class CSVWriter : MonoBehaviour
     {
-        [SerializeField] private GameObject Camera;
-        [SerializeField] private LineRenderer lRend;
-        public int LengthOfRay = 10;
+        [SerializeField] private GameObject Camera;     // カメラオブジェクト
+        
+        [SerializeField] private LineRenderer lRend;    // テスト用:視線確認用のLineのレンダラー
+        public int LengthOfRay = 10;                    // テスト用:視線ラインの描画距離
 
-        private static StreamWriter writer90hz;
-        private static StreamWriter writer120hz;
-        private string gazeFilePath;
-        private string pupilFilePath;
+        private static StreamWriter writer90hz;         // gazeData書き出し用
+        private static StreamWriter writer120hz;        // pupilData書き出し用
+        private string gazeFilePath;                    // 視線データ保存場所
+        private string pupilFilePath;                   // 瞳孔データ保存場所
+        // gazeData.csvの１行目，column名
         private string gazeDataLabels = "timestamp" + "," +
                                         "gazeOriginL.X" + "," + "gazeOriginL.Y" + "," + "gazeOriginL.Z" + "," +
                                         "gazeOriginR.X" + "," + "gazeOriginR.Y" + "," + "gazeOriginR.Z" + "," +
@@ -30,9 +26,8 @@ namespace ViveSR.anipal.Eye
                                         "gazeDir_R.X" + "," + "gazeDir_R.Y" + "," + "gazeDir_R.Z" + "," +
                                         "cameraPos.X" + "," + "cameraPos.Y" + "," + "cameraPos.Z" + "," +
                                         "cameraAng.X" + "," + "cameraAng.Y" + "," + "cameraAng.Z";
+        // pupilData.csvの１行目，column名
         private string pupilDataLabels = "timestamp" + "," + "pupilDia_L" + "," + "pupilDia_R";
-
-        
 
         /// <summary>
         /// Use this for initialization
@@ -62,13 +57,13 @@ namespace ViveSR.anipal.Eye
                                 GetEyeDataModule.gazeDirectionRight.x + "," + GetEyeDataModule.gazeDirectionRight.y + "," + GetEyeDataModule.gazeDirectionRight.z + "," +
                                 Camera.transform.position.x + "," + Camera.transform.position.y + "," + Camera.transform.position.z + "," +
                                 Camera.transform.localEulerAngles.x + "," + Camera.transform.localEulerAngles.y + "," + Camera.transform.localEulerAngles.z);
+            // テスト用: 視線をラインで描画する
             SetGazeRay();
         }
 
         // GetEyeDataModuleから呼び出される(120Hz更新)
         public static void Write()
         {
-
             // 瞳孔径の書き出し
             writer120hz.WriteLine(GetEyeDataModule.timeStamp + "," +
                                 GetEyeDataModule.pupilDiameterLeft + "," + GetEyeDataModule.pupilDiameterRight);
@@ -87,12 +82,13 @@ namespace ViveSR.anipal.Eye
 
         }
 
+        // テスト用: 視線の描画
         void SetGazeRay()
         {
             Vector3 rayOrigin = Camera.transform.position + GetEyeDataModule.gazeOriginRight;
             Vector3 tGazeDirection = Camera.transform.TransformDirection(GetEyeDataModule.gazeDirectionRight);
-            lRend.SetPosition(0, rayOrigin);
-            lRend.SetPosition(1, rayOrigin + tGazeDirection * LengthOfRay);
+            lRend.SetPosition(0, rayOrigin);                                // 視線の始点設定
+            lRend.SetPosition(1, rayOrigin + tGazeDirection * LengthOfRay); // 視線の終点設定
 
         }
     }

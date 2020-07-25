@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class RecordSlider : MonoBehaviour
 {
-    [SerializeField] private GameObject CSVReader;
-    [SerializeField] private GameObject Camera;
-    [SerializeField] private Text TimeText;
-    [SerializeField] private LineRenderer lRend;
-    [SerializeField] private Slider slider;
+    [SerializeField] private GameObject CSVReader;  // CSV読み込み用モジュール
+    [SerializeField] private GameObject Camera;     // カメラオブジェクト
+    [SerializeField] private Text TimeText;         // 画面UI上のテキスト，タイムスタンプを表示する
+    [SerializeField] private LineRenderer lRend;    // 視線描画用レンダラー
+    [SerializeField] private Slider slider;         // シークエンスバー
 
     // csvデータを格納するリスト
     public static List<string[]> gazeDatas = new List<string[]>();
@@ -19,23 +19,26 @@ public class RecordSlider : MonoBehaviour
     public static int g_lcount = 0;
     public static int p_lcount = 0;
 
-    public static int initTime, time;
-    public static Vector3 gazeOriginL, gazeOriginR, gazeDirL, gazeDirR, c_pos, c_ang;
-    
-    public int LengthOfRay = 10;
+    // csvから読み込んだ各眼球データ
+    public static int initTime, time;   // タイムスタンプ
+    public static Vector3 gazeOriginL, gazeOriginR, gazeDirL, gazeDirR, c_pos, c_ang;   // 視線の原点とベクトル，カメラ位置と向き
+
+    public int LengthOfRay = 10;    // 視線ラインの長さ
+
     // Start is called before the first frame update
     void Start()
     {
-        CSVReader.GetComponent<CSVReader>().Read();
-        slider.maxValue = g_lcount;
-        slider.minValue = slider.value = 1.0f;
+        CSVReader.GetComponent<CSVReader>().Read(); // csv読み込みモジュールの起動
+        slider.maxValue = g_lcount;                 // シークエンスバーの最大値設定
+        slider.minValue = slider.value = 1.0f;      // シークエンスバーの最小値と現在値の設定
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (slider.value < g_lcount)
+        if (slider.value < g_lcount)    // ←修正予定
         {
+            // シークエンスバーの位置(=タイムスタンプ)に合わせて各データを代入，実験時の様子を再現
             int fcount = (int)slider.value;
             int.TryParse(gazeDatas[fcount][0], out time);
             gazeOriginL = new Vector3(float.Parse(gazeDatas[fcount][1]), float.Parse(gazeDatas[fcount][2]), float.Parse(gazeDatas[fcount][3]));
@@ -46,25 +49,25 @@ public class RecordSlider : MonoBehaviour
             c_ang = new Vector3(float.Parse(gazeDatas[fcount][16]), float.Parse(gazeDatas[fcount][17]), float.Parse(gazeDatas[fcount][18]));
 
         }
-        slider.value++;
+        slider.value++; // スライダーを毎フレーム１ずつ動かす
 
-        TimeText.text = time.ToString();
-        SetCamera();
-        SetGazeRay();
+        TimeText.text = time.ToString();    // UI上のテキストにタイムスタンプを表示
+        SetCamera();    // カメラ位置と向きを設定
+        SetGazeRay();   // 視線を描画
 
     }
 
     void SetCamera()
     {
-        Camera.transform.position = c_pos;
-        Camera.transform.localEulerAngles = c_ang;
+        Camera.transform.position = c_pos;          // カメラ位置の更新
+        Camera.transform.localEulerAngles = c_ang;  // カメラ向きの更新
     }
 
     void SetGazeRay()
     {
-        Vector3 rayOrigin = c_pos + gazeOriginR;
-        Vector3 tGazeDirection = Camera.transform.TransformDirection(gazeDirR);
-        lRend.SetPosition(0, rayOrigin);
-        lRend.SetPosition(1, rayOrigin + tGazeDirection * LengthOfRay);
+        Vector3 rayOrigin = c_pos + gazeOriginR;    // 視線原点の設定
+        Vector3 tGazeDirection = Camera.transform.TransformDirection(gazeDirR); // 視線ベクトルの設定
+        lRend.SetPosition(0, rayOrigin);    // 視線ラインの始点設定
+        lRend.SetPosition(1, rayOrigin + tGazeDirection * LengthOfRay); // 視線ラインの終点設定
     }
 }
