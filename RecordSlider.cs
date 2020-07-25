@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class RecordSlider : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class RecordSlider : MonoBehaviour
     [SerializeField] private Text TimeText;         // 画面UI上のテキスト，タイムスタンプを表示する
     [SerializeField] private LineRenderer lRend;    // 視線描画用レンダラー
     [SerializeField] private Slider slider;         // シークエンスバー
+    [SerializeField] private VideoPlayer vPlayer;
 
     // csvデータを格納するリスト
     public static List<string[]> gazeDatas = new List<string[]>();
@@ -29,8 +31,11 @@ public class RecordSlider : MonoBehaviour
     void Start()
     {
         CSVReader.GetComponent<CSVReader>().Read(); // csv読み込みモジュールの起動
+        int.TryParse(gazeDatas[1][0], out initTime);// 最初のタイムスタンプの値を取得
         slider.maxValue = g_lcount;                 // シークエンスバーの最大値設定
         slider.minValue = slider.value = 1.0f;      // シークエンスバーの最小値と現在値の設定
+
+        Debug.Log(vPlayer.clip.length);
     }
 
     // Update is called once per frame
@@ -40,14 +45,16 @@ public class RecordSlider : MonoBehaviour
         {
             // シークエンスバーの位置(=タイムスタンプ)に合わせて各データを代入，実験時の様子を再現
             int fcount = (int)slider.value;
-            int.TryParse(gazeDatas[fcount][0], out time);
+            time = int.Parse(gazeDatas[fcount][0]) - initTime;
+            //int.TryParse(gazeDatas[fcount][0], out time);
             gazeOriginL = new Vector3(float.Parse(gazeDatas[fcount][1]), float.Parse(gazeDatas[fcount][2]), float.Parse(gazeDatas[fcount][3]));
             gazeOriginR = new Vector3(float.Parse(gazeDatas[fcount][4]), float.Parse(gazeDatas[fcount][5]), float.Parse(gazeDatas[fcount][6]));
             gazeDirL = new Vector3(float.Parse(gazeDatas[fcount][7]), float.Parse(gazeDatas[fcount][8]), float.Parse(gazeDatas[fcount][9]));
             gazeDirR = new Vector3(float.Parse(gazeDatas[fcount][10]), float.Parse(gazeDatas[fcount][11]), float.Parse(gazeDatas[fcount][12]));
             c_pos = new Vector3(float.Parse(gazeDatas[fcount][13]), float.Parse(gazeDatas[fcount][14]), float.Parse(gazeDatas[fcount][15]));
             c_ang = new Vector3(float.Parse(gazeDatas[fcount][16]), float.Parse(gazeDatas[fcount][17]), float.Parse(gazeDatas[fcount][18]));
-
+            
+            vPlayer.time = (float)time/1000;
         }
         slider.value++; // スライダーを毎フレーム１ずつ動かす
 
