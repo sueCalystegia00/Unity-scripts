@@ -23,7 +23,9 @@ public class RecordSlider : MonoBehaviour
 
     // csvから読み込んだ各眼球データ
     public static int initTime, time;   // タイムスタンプ
-    public static Vector3 gazeOriginL, gazeOriginR, gazeDirL, gazeDirR, c_pos, c_ang;   // 視線の原点とベクトル，カメラ位置と向き
+    public static Vector3 gazeOriginL, gazeOriginR, gazeOriginC;    //視線の原点(眼球位置)
+    public static Vector3 gazeDirL, gazeDirR, gazeDirC;             //視線のベクトル
+    public static Vector3 c_pos, c_ang;   //カメラ位置と向き
 
     public int LengthOfRay = 10;    // 視線ラインの長さ
 
@@ -47,12 +49,14 @@ public class RecordSlider : MonoBehaviour
             int fcount = (int)slider.value;
             time = int.Parse(gazeDatas[fcount][0]) - initTime;
             //int.TryParse(gazeDatas[fcount][0], out time);
-            gazeOriginL = new Vector3(float.Parse(gazeDatas[fcount][1]), float.Parse(gazeDatas[fcount][2]), float.Parse(gazeDatas[fcount][3]));
-            gazeOriginR = new Vector3(float.Parse(gazeDatas[fcount][4]), float.Parse(gazeDatas[fcount][5]), float.Parse(gazeDatas[fcount][6]));
-            gazeDirL = new Vector3(float.Parse(gazeDatas[fcount][7]), float.Parse(gazeDatas[fcount][8]), float.Parse(gazeDatas[fcount][9]));
-            gazeDirR = new Vector3(float.Parse(gazeDatas[fcount][10]), float.Parse(gazeDatas[fcount][11]), float.Parse(gazeDatas[fcount][12]));
-            c_pos = new Vector3(float.Parse(gazeDatas[fcount][13]), float.Parse(gazeDatas[fcount][14]), float.Parse(gazeDatas[fcount][15]));
-            c_ang = new Vector3(float.Parse(gazeDatas[fcount][16]), float.Parse(gazeDatas[fcount][17]), float.Parse(gazeDatas[fcount][18]));
+            //gazeOriginL = new Vector3(float.Parse(gazeDatas[fcount][1]), float.Parse(gazeDatas[fcount][2]), float.Parse(gazeDatas[fcount][3]));
+            //gazeOriginR = new Vector3(float.Parse(gazeDatas[fcount][4]), float.Parse(gazeDatas[fcount][5]), float.Parse(gazeDatas[fcount][6]));
+            gazeOriginC = new Vector3(float.Parse(gazeDatas[fcount][1]), float.Parse(gazeDatas[fcount][2]), float.Parse(gazeDatas[fcount][3]));
+            //gazeDirL = new Vector3(float.Parse(gazeDatas[fcount][7]), float.Parse(gazeDatas[fcount][8]), float.Parse(gazeDatas[fcount][9]));
+            //gazeDirR = new Vector3(float.Parse(gazeDatas[fcount][10]), float.Parse(gazeDatas[fcount][11]), float.Parse(gazeDatas[fcount][12]));
+            gazeDirC = new Vector3(float.Parse(gazeDatas[fcount][4]), float.Parse(gazeDatas[fcount][5]), float.Parse(gazeDatas[fcount][6]));
+            c_pos = new Vector3(float.Parse(gazeDatas[fcount][7]), float.Parse(gazeDatas[fcount][8]), float.Parse(gazeDatas[fcount][9]));
+            c_ang = new Vector3(float.Parse(gazeDatas[fcount][10]), float.Parse(gazeDatas[fcount][11]), float.Parse(gazeDatas[fcount][12]));
             
             vPlayer.time = (float)time/1000;
         }

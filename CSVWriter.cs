@@ -20,10 +20,12 @@ namespace ViveSR.anipal.Eye
         private string pupilFilePath;                   // 瞳孔データ保存場所
         // gazeData.csvの１行目，column名
         private string gazeDataLabels = "timestamp" + "," +
-                                        "gazeOriginL.X" + "," + "gazeOriginL.Y" + "," + "gazeOriginL.Z" + "," +
-                                        "gazeOriginR.X" + "," + "gazeOriginR.Y" + "," + "gazeOriginR.Z" + "," +
-                                        "gazeDir_L.X" + "," + "gazeDir_L.Y" + "," + "gazeDir_L.Z" + "," +
-                                        "gazeDir_R.X" + "," + "gazeDir_R.Y" + "," + "gazeDir_R.Z" + "," +
+                                        //"gazeOriginL.X" + "," + "gazeOriginL.Y" + "," + "gazeOriginL.Z" + "," +
+                                        //"gazeOriginR.X" + "," + "gazeOriginR.Y" + "," + "gazeOriginR.Z" + "," +
+                                        "gazeOriginC.X" + "," + "gazeOriginC.Y" + "," + "gazeOriginC.Z" + "," +
+                                        //"gazeDir_L.X" + "," + "gazeDir_L.Y" + "," + "gazeDir_L.Z" + "," +
+                                        //"gazeDir_R.X" + "," + "gazeDir_R.Y" + "," + "gazeDir_R.Z" + "," +
+                                        "gazeDir_C.X" + "," + "gazeDir_C.Y" + "," + "gazeDir_C.Z" + "," +
                                         "cameraPos.X" + "," + "cameraPos.Y" + "," + "cameraPos.Z" + "," +
                                         "cameraAng.X" + "," + "cameraAng.Y" + "," + "cameraAng.Z";
         // pupilData.csvの１行目，column名
@@ -51,10 +53,12 @@ namespace ViveSR.anipal.Eye
 
             // 視線データの書き出し
             writer90hz.WriteLine(GetEyeDataModule.timeStamp + "," +
-                                GetEyeDataModule.gazeOriginLeft.x + "," + GetEyeDataModule.gazeOriginLeft.y + "," + GetEyeDataModule.gazeOriginLeft.z + "," +
-                                GetEyeDataModule.gazeOriginRight.x + "," + GetEyeDataModule.gazeOriginRight.y + "," + GetEyeDataModule.gazeOriginRight.z + "," +
-                                GetEyeDataModule.gazeDirectionLeft.x + "," + GetEyeDataModule.gazeDirectionLeft.y + "," + GetEyeDataModule.gazeDirectionLeft.z + "," +
-                                GetEyeDataModule.gazeDirectionRight.x + "," + GetEyeDataModule.gazeDirectionRight.y + "," + GetEyeDataModule.gazeDirectionRight.z + "," +
+                                //GetEyeDataModule.gazeOriginLeft.x + "," + GetEyeDataModule.gazeOriginLeft.y + "," + GetEyeDataModule.gazeOriginLeft.z + "," +
+                                //GetEyeDataModule.gazeOriginRight.x + "," + GetEyeDataModule.gazeOriginRight.y + "," + GetEyeDataModule.gazeOriginRight.z + "," +
+                                GetEyeDataModule.gazeOriginCombine.x + "," + GetEyeDataModule.gazeOriginCombine.y + "," + GetEyeDataModule.gazeOriginCombine.z + "," +
+                                //GetEyeDataModule.gazeDirectionLeft.x + "," + GetEyeDataModule.gazeDirectionLeft.y + "," + GetEyeDataModule.gazeDirectionLeft.z + "," +
+                                //GetEyeDataModule.gazeDirectionRight.x + "," + GetEyeDataModule.gazeDirectionRight.y + "," + GetEyeDataModule.gazeDirectionRight.z + "," +
+                                GetEyeDataModule.gazeDirectionCombine.x + "," + GetEyeDataModule.gazeDirectionCombine.y + "," + GetEyeDataModule.gazeDirectionCombine.z + "," +
                                 Camera.transform.position.x + "," + Camera.transform.position.y + "," + Camera.transform.position.z + "," +
                                 Camera.transform.localEulerAngles.x + "," + Camera.transform.localEulerAngles.y + "," + Camera.transform.localEulerAngles.z);
             // テスト用: 視線をラインで描画する
@@ -85,8 +89,8 @@ namespace ViveSR.anipal.Eye
         // テスト用: 視線の描画
         void SetGazeRay()
         {
-            Vector3 rayOrigin = Camera.transform.position + GetEyeDataModule.gazeOriginRight;
-            Vector3 tGazeDirection = Camera.transform.TransformDirection(GetEyeDataModule.gazeDirectionRight);
+            Vector3 rayOrigin = Camera.transform.position + GetEyeDataModule.gazeOriginCombine;
+            Vector3 tGazeDirection = Camera.transform.TransformDirection(GetEyeDataModule.gazeDirectionCombine);
             lRend.SetPosition(0, rayOrigin);                                // 視線の始点設定
             lRend.SetPosition(1, rayOrigin + tGazeDirection * LengthOfRay); // 視線の終点設定
 

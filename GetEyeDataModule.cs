@@ -13,8 +13,8 @@ namespace ViveSR.anipal.Eye
         readonly static object DebugWriter = new object();      // Lockステートメント用オブジェクト
         public static int timeStamp;    // VIVE内部の時間(ミリ秒)
         public static float pupilDiameterLeft, pupilDiameterRight;  // 瞳孔径
-        public static Vector3 gazeOriginLeft, gazeOriginRight;      // 空間における眼球位置
-        public static Vector3 gazeDirectionLeft, gazeDirectionRight;    // 視線ベクトル
+        public static Vector3 gazeOriginLeft, gazeOriginRight, gazeOriginCombine;      // 空間における眼球位置
+        public static Vector3 gazeDirectionLeft, gazeDirectionRight, gazeDirectionCombine;    // 視線ベクトル
 
         
 
@@ -65,8 +65,10 @@ namespace ViveSR.anipal.Eye
             pupilDiameterRight = eyeData.verbose_data.right.pupil_diameter_mm;
 
             // 視線の原点とベクトルを取得(3次元座標，正規化ベクトル)
-            SRanipal_Eye_v2.GetGazeRay(GazeIndex.LEFT, out gazeOriginLeft, out gazeDirectionLeft, eyeData);
-            SRanipal_Eye_v2.GetGazeRay(GazeIndex.RIGHT, out gazeOriginRight, out gazeDirectionRight, eyeData);
+            //SRanipal_Eye_v2.GetGazeRay(GazeIndex.LEFT, out gazeOriginLeft, out gazeDirectionLeft, eyeData);
+            //SRanipal_Eye_v2.GetGazeRay(GazeIndex.RIGHT, out gazeOriginRight, out gazeDirectionRight, eyeData);
+            SRanipal_Eye_v2.GetGazeRay(GazeIndex.COMBINE, out gazeOriginCombine, out gazeDirectionCombine, eyeData);
+
 
             /*
             // The point in the eye from which the gaze ray originates in meter miles.(right-handed coordinate system)
