@@ -10,7 +10,6 @@ namespace ViveSR.anipal.Eye
     public class CSVWriter : MonoBehaviour
     {
         [SerializeField] private GameObject Camera;     // カメラオブジェクト
-        
         [SerializeField] private LineRenderer lRend;    // テスト用:視線確認用のLineのレンダラー
         public int LengthOfRay = 10;                    // テスト用:視線ラインの描画距離
 
@@ -45,7 +44,7 @@ namespace ViveSR.anipal.Eye
             // 1行目(データのラベル)の書き出し
             writer90hz.WriteLine(gazeDataLabels);
             writer120hz.WriteLine(pupilDataLabels);
-            
+
         }
 
         void FixedUpdate()

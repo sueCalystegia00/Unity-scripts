@@ -57,8 +57,8 @@ public class RecordSlider : MonoBehaviour
             gazeDirC = new Vector3(float.Parse(gazeDatas[fcount][4]), float.Parse(gazeDatas[fcount][5]), float.Parse(gazeDatas[fcount][6]));
             c_pos = new Vector3(float.Parse(gazeDatas[fcount][7]), float.Parse(gazeDatas[fcount][8]), float.Parse(gazeDatas[fcount][9]));
             c_ang = new Vector3(float.Parse(gazeDatas[fcount][10]), float.Parse(gazeDatas[fcount][11]), float.Parse(gazeDatas[fcount][12]));
-            
-            vPlayer.time = (float)time/1000;
+
+            vPlayer.time = (float)time / 1000;
         }
         slider.value++; // スライダーを毎フレーム１ずつ動かす
 
@@ -76,8 +76,8 @@ public class RecordSlider : MonoBehaviour
 
     void SetGazeRay()
     {
-        Vector3 rayOrigin = c_pos + gazeOriginR;    // 視線原点の設定
-        Vector3 tGazeDirection = Camera.transform.TransformDirection(gazeDirR); // 視線ベクトルの設定
+        Vector3 rayOrigin = c_pos + gazeOriginC;    // 視線原点の設定
+        Vector3 tGazeDirection = Camera.transform.TransformDirection(gazeDirC); // 視線ベクトルの設定
         lRend.SetPosition(0, rayOrigin);    // 視線ラインの始点設定
         lRend.SetPosition(1, rayOrigin + tGazeDirection * LengthOfRay); // 視線ラインの終点設定
     }

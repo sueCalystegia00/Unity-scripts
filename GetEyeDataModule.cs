@@ -16,7 +16,7 @@ namespace ViveSR.anipal.Eye
         public static Vector3 gazeOriginLeft, gazeOriginRight, gazeOriginCombine;      // 空間における眼球位置
         public static Vector3 gazeDirectionLeft, gazeDirectionRight, gazeDirectionCombine;    // 視線ベクトル
 
-        
+
 
         /// <summary>
         /// Use this for initialization
@@ -74,7 +74,6 @@ namespace ViveSR.anipal.Eye
             // The point in the eye from which the gaze ray originates in meter miles.(right-handed coordinate system)
             gazeOriginLeft = eyeData.verbose_data.left.gaze_origin_mm;
             gazeOriginRight = eyeData.verbose_data.right.gaze_origin_mm;
-
             // The normalized gaze direction of the eye in [0,1].(right-handed coordinate system)
             gazeDirectionLeft = eyeData.verbose_data.left.gaze_direction_normalized;
             gazeDirectionRight = eyeData.verbose_data.right.gaze_direction_normalized;
