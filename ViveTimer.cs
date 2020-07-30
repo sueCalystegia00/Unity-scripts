@@ -9,31 +9,30 @@ namespace ViveSR.anipal.Eye
 {
     public class ViveTimer : MonoBehaviour
     {
-        private bool isTesting = false;     // 実験中かプレイバック中か
-        public static float preVTime = 0;   // 1フレーム前のタイムスタンプ
-        public static float deltaVTime;     // フレーム間のタイムスタンプの差
+        private bool isTesting = false;
+        public static float preVTime = 0;
+        public static float deltaVTime;
 
         // Start is called before the first frame update
         void Start()
         {
-            if (GameObject.Find("SRanipal Eye Framework")) isTesting = true;    // 実験中かプレイバック中か判定
+            if (GameObject.Find("SRanipal Eye Framework")) isTesting = true;
         }
 
         // Update is called once per frame
         void FixedUpdate()
         {
-            if (isTesting)  // 実験中
+            if (isTesting)
             {
                 deltaVTime = ((float)GetEyeDataModule.timeStamp - preVTime)/1000;
                 preVTime = (float)GetEyeDataModule.timeStamp;
             }
-            else    // プレイバック中
+            else
             {
                 deltaVTime = ((float)RecordSlider.time - preVTime) / 1000;
                 preVTime = (float)RecordSlider.time;
             }
-
-            //Debug.Log(deltaVTime);
+            
         }
     }
 }
