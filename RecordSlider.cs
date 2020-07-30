@@ -37,7 +37,7 @@ public class RecordSlider : MonoBehaviour
         slider.maxValue = g_lcount;                 // シークエンスバーの最大値設定
         slider.minValue = slider.value = 1.0f;      // シークエンスバーの最小値と現在値の設定
 
-        Debug.Log(vPlayer.clip.length);
+        //Debug.Log(vPlayer.clip.length);
     }
 
     // Update is called once per frame
@@ -48,17 +48,11 @@ public class RecordSlider : MonoBehaviour
             // シークエンスバーの位置(=タイムスタンプ)に合わせて各データを代入，実験時の様子を再現
             int fcount = (int)slider.value;
             time = int.Parse(gazeDatas[fcount][0]) - initTime;
-            //int.TryParse(gazeDatas[fcount][0], out time);
-            //gazeOriginL = new Vector3(float.Parse(gazeDatas[fcount][1]), float.Parse(gazeDatas[fcount][2]), float.Parse(gazeDatas[fcount][3]));
-            //gazeOriginR = new Vector3(float.Parse(gazeDatas[fcount][4]), float.Parse(gazeDatas[fcount][5]), float.Parse(gazeDatas[fcount][6]));
             gazeOriginC = new Vector3(float.Parse(gazeDatas[fcount][1]), float.Parse(gazeDatas[fcount][2]), float.Parse(gazeDatas[fcount][3]));
-            //gazeDirL = new Vector3(float.Parse(gazeDatas[fcount][7]), float.Parse(gazeDatas[fcount][8]), float.Parse(gazeDatas[fcount][9]));
-            //gazeDirR = new Vector3(float.Parse(gazeDatas[fcount][10]), float.Parse(gazeDatas[fcount][11]), float.Parse(gazeDatas[fcount][12]));
             gazeDirC = new Vector3(float.Parse(gazeDatas[fcount][4]), float.Parse(gazeDatas[fcount][5]), float.Parse(gazeDatas[fcount][6]));
             c_pos = new Vector3(float.Parse(gazeDatas[fcount][7]), float.Parse(gazeDatas[fcount][8]), float.Parse(gazeDatas[fcount][9]));
             c_ang = new Vector3(float.Parse(gazeDatas[fcount][10]), float.Parse(gazeDatas[fcount][11]), float.Parse(gazeDatas[fcount][12]));
-
-            vPlayer.time = (float)time / 1000;
+            vPlayer.time = float.Parse(gazeDatas[fcount][13]);
         }
         slider.value++; // スライダーを毎フレーム１ずつ動かす
 

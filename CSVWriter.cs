@@ -10,7 +10,9 @@ namespace ViveSR.anipal.Eye
     public class CSVWriter : MonoBehaviour
     {
         [SerializeField] private GameObject Camera;     // カメラオブジェクト
+        [SerializeField] private VideoPlayer vPlayer;    // 天球動画
         [SerializeField] private LineRenderer lRend;    // テスト用:視線確認用のLineのレンダラー
+        
         public int LengthOfRay = 10;                    // テスト用:視線ラインの描画距離
 
         private static StreamWriter writer90hz;         // gazeData書き出し用
@@ -19,14 +21,11 @@ namespace ViveSR.anipal.Eye
         private string pupilFilePath;                   // 瞳孔データ保存場所
         // gazeData.csvの１行目，column名
         private string gazeDataLabels = "timestamp" + "," +
-                                        //"gazeOriginL.X" + "," + "gazeOriginL.Y" + "," + "gazeOriginL.Z" + "," +
-                                        //"gazeOriginR.X" + "," + "gazeOriginR.Y" + "," + "gazeOriginR.Z" + "," +
                                         "gazeOriginC.X" + "," + "gazeOriginC.Y" + "," + "gazeOriginC.Z" + "," +
-                                        //"gazeDir_L.X" + "," + "gazeDir_L.Y" + "," + "gazeDir_L.Z" + "," +
-                                        //"gazeDir_R.X" + "," + "gazeDir_R.Y" + "," + "gazeDir_R.Z" + "," +
                                         "gazeDir_C.X" + "," + "gazeDir_C.Y" + "," + "gazeDir_C.Z" + "," +
                                         "cameraPos.X" + "," + "cameraPos.Y" + "," + "cameraPos.Z" + "," +
-                                        "cameraAng.X" + "," + "cameraAng.Y" + "," + "cameraAng.Z";
+                                        "cameraAng.X" + "," + "cameraAng.Y" + "," + "cameraAng.Z" + "," +
+                                        "videotime";
         // pupilData.csvの１行目，column名
         private string pupilDataLabels = "timestamp" + "," + "pupilDia_L" + "," + "pupilDia_R";
 
@@ -52,14 +51,11 @@ namespace ViveSR.anipal.Eye
 
             // 視線データの書き出し
             writer90hz.WriteLine(GetEyeDataModule.timeStamp + "," +
-                                //GetEyeDataModule.gazeOriginLeft.x + "," + GetEyeDataModule.gazeOriginLeft.y + "," + GetEyeDataModule.gazeOriginLeft.z + "," +
-                                //GetEyeDataModule.gazeOriginRight.x + "," + GetEyeDataModule.gazeOriginRight.y + "," + GetEyeDataModule.gazeOriginRight.z + "," +
                                 GetEyeDataModule.gazeOriginCombine.x + "," + GetEyeDataModule.gazeOriginCombine.y + "," + GetEyeDataModule.gazeOriginCombine.z + "," +
-                                //GetEyeDataModule.gazeDirectionLeft.x + "," + GetEyeDataModule.gazeDirectionLeft.y + "," + GetEyeDataModule.gazeDirectionLeft.z + "," +
-                                //GetEyeDataModule.gazeDirectionRight.x + "," + GetEyeDataModule.gazeDirectionRight.y + "," + GetEyeDataModule.gazeDirectionRight.z + "," +
                                 GetEyeDataModule.gazeDirectionCombine.x + "," + GetEyeDataModule.gazeDirectionCombine.y + "," + GetEyeDataModule.gazeDirectionCombine.z + "," +
                                 Camera.transform.position.x + "," + Camera.transform.position.y + "," + Camera.transform.position.z + "," +
-                                Camera.transform.localEulerAngles.x + "," + Camera.transform.localEulerAngles.y + "," + Camera.transform.localEulerAngles.z);
+                                Camera.transform.localEulerAngles.x + "," + Camera.transform.localEulerAngles.y + "," + Camera.transform.localEulerAngles.z + "," +
+                                vPlayer.time);
             // テスト用: 視線をラインで描画する
             SetGazeRay();
         }
