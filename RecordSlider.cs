@@ -22,7 +22,7 @@ public class RecordSlider : MonoBehaviour
     public static int p_lcount = 0;
 
     // csvから読み込んだ各眼球データ
-    public static int initTime, time;   // タイムスタンプ
+    public static froat initTime, time;   // タイムスタンプ
     public static Vector3 gazeOriginL, gazeOriginR, gazeOriginC;    //視線の原点(眼球位置)
     public static Vector3 gazeDirL, gazeDirR, gazeDirC;             //視線のベクトル
     public static Vector3 c_pos, c_ang;   //カメラ位置と向き
@@ -33,7 +33,7 @@ public class RecordSlider : MonoBehaviour
     void Start()
     {
         CSVReader.GetComponent<CSVReader>().Read(); // csv読み込みモジュールの起動
-        int.TryParse(gazeDatas[1][0], out initTime);// 最初のタイムスタンプの値を取得
+        initTime = float.Parse(gazeDatas[1][0]);// 最初のタイムスタンプの値を取得
         slider.maxValue = g_lcount;                 // シークエンスバーの最大値設定
         slider.minValue = slider.value = 1.0f;      // シークエンスバーの最小値と現在値の設定
 
@@ -47,16 +47,17 @@ public class RecordSlider : MonoBehaviour
         {
             // シークエンスバーの位置(=タイムスタンプ)に合わせて各データを代入，実験時の様子を再現
             int fcount = (int)slider.value;
-            time = int.Parse(gazeDatas[fcount][0]) - initTime;
+            time = float.Parse(gazeDatas[fcount][0]) - initTime;
             gazeOriginC = new Vector3(float.Parse(gazeDatas[fcount][1]), float.Parse(gazeDatas[fcount][2]), float.Parse(gazeDatas[fcount][3]));
             gazeDirC = new Vector3(float.Parse(gazeDatas[fcount][4]), float.Parse(gazeDatas[fcount][5]), float.Parse(gazeDatas[fcount][6]));
             c_pos = new Vector3(float.Parse(gazeDatas[fcount][7]), float.Parse(gazeDatas[fcount][8]), float.Parse(gazeDatas[fcount][9]));
             c_ang = new Vector3(float.Parse(gazeDatas[fcount][10]), float.Parse(gazeDatas[fcount][11]), float.Parse(gazeDatas[fcount][12]));
-            vPlayer.time = float.Parse(gazeDatas[fcount][13]);
+            //vPlayer.time = float.Parse(gazeDatas[fcount][13]);
         }
         slider.value++; // スライダーを毎フレーム１ずつ動かす
 
         TimeText.text = time.ToString();    // UI上のテキストにタイムスタンプを表示
+        vPlayer.time = time;
         SetCamera();    // カメラ位置と向きを設定
         SetGazeRay();   // 視線を描画
 
