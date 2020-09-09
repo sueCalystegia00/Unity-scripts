@@ -21,7 +21,6 @@ public class CSVReader : MonoBehaviour
             {
                 string line = streamReader.ReadLine();
                 RecordSlider.gazeDatas.Add(line.Split(','));
-                RecordSlider.g_lcount++;
             }
         }
         /*

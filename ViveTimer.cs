@@ -29,7 +29,7 @@ namespace ViveSR.anipal.Eye
             }
             else
             {
-                deltaVTime = ((float)RecordSlider.time - preVTime) / 1000;
+                deltaVTime = (float)(RecordSlider.time - preVTime) / 1000;
                 preVTime = (float)RecordSlider.time;
             }
             
